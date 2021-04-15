@@ -6,6 +6,7 @@ const { Meeting }=require('../model');
 const fs = require('fs');
 const uuid = require('uuid/v4');
 const AWS = require('aws-sdk');
+const { response } = require('express');
 /* eslint-enable */
 
 let hostname = '127.0.0.1';
@@ -26,6 +27,7 @@ if (alternateEndpoint) {
   );
 }
 
+// @TODO 밑에 캐시 두 개 데이터 베이스에 넣어서 관리하면 될 것 같습니둥
 const meetingCache = {};
 const attendeeCache = {};
 
@@ -59,7 +61,7 @@ router.post('/', async function(req, res,next){
   });
 
   const title = meeting.title;
-  const name = "백승수";
+  const name = "백승수"; // @TODO 요청한 유저 이름을 넣어야함
   const region = "us-east-1"
   
   if (!meetingCache[title]){
@@ -71,8 +73,26 @@ router.post('/', async function(req, res,next){
       .promise();
       attendeeCache[title] = {};
   }
-  console.log(meetingCache[title]);
-
+  const joinInfo = {
+    JoinInfo: {
+      Title: title,
+      Meeting: meetingCache[title].Meeting,
+      Attendee: (
+        await chime
+          .createAttendee({
+            MeetingId: meetingCache[title].Meeting.MeetingId,
+            ExternalUserId: uuid()
+          })
+          .promise()
+      ).Attendee
+    }
+  };
+  attendeeCache[title][joinInfo.joinInfo.Attendee.AttendeeId] = name;
+  res.statusCode = 201;
+  res.setHeader('Content-Type', 'application/json');
+  res.write(JSON.stringify(joinInfo), 'utf8');
+  res.end();
+  
   meeting.save((err)=>{
     res.send("방을 생성하였습니다.")
   });
