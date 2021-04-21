@@ -47,13 +47,15 @@ router.get('/', async function(req, res, next) {
 });
 
 // GET one meeting
-router.get('/:id', async function(req, res, next) {
+router.get('/attendee:id', async function(req, res, next) {
   const meeting = await Meeting.findOne({_id:req.params.id});
-  //res.json(meeting);
+  res.json(meeting);
 });
 
 // POST write one meeting
-router.post('/', async function(req, res,next){
+router.post('/join', async function(req, res, next){
+  
+  console.log(req.body);
   const meeting = new Meeting({
     title:req.body.title,
     num:req.body.num,
@@ -61,7 +63,7 @@ router.post('/', async function(req, res,next){
   });
 
   const title = meeting.title;
-  const name = "백승수"; // @TODO 요청한 유저 이름을 넣어야함
+  const name = "백승수"; // @TODO 세션을활용해서 Nickname 넣어주기
   const region = "us-east-1"
   
   if (!meetingCache[title]){
@@ -87,14 +89,14 @@ router.post('/', async function(req, res,next){
       ).Attendee
     }
   };
-  attendeeCache[title][joinInfo.joinInfo.Attendee.AttendeeId] = name;
-  res.statusCode = 201;
-  res.setHeader('Content-Type', 'application/json');
-  res.write(JSON.stringify(joinInfo), 'utf8');
-  res.end();
+  attendeeCache[title][joinInfo.JoinInfo.Attendee.AttendeeId] = name;
+
   
   meeting.save((err)=>{
-    res.send("방을 생성하였습니다.")
+    res.statusCode = 201;
+    res.setHeader('Content-Type', 'application/json');
+    res.write(JSON.stringify(joinInfo), 'utf8');
+    res.end();
   });
 })
 
@@ -105,9 +107,18 @@ router.put('/:id', async function(req,res,next){
 })
 
 // DELETE one meeting
-router.delete('/:id', async function(req,res,next){
-  const meeting = await Meeting.deleteOne({_id : req.params.id});
-  //res.json(meeting);
+router.delete('/delete/:id', async function(req,res,next){
+  const title = req.params.id;
+  Meeting.deleteOne({_id : title}); // @TODO : 이거 params으로 못넘길듯? encrypted되는걸로알고있음.
+
+  // await chime
+  //   .deleteMeeting({
+  //     MeetingId: meetingCache[title].Meeting.MeetingId
+  //   })
+  //    .promise();
+  //   response.statusCode = 200;
+  //   response.end();
+  //   res.send("The meeting is terminated successful");
 });
 
 module.exports = router;

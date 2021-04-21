@@ -8,6 +8,7 @@ import Main from './routes/Main'
 import Room from './routes/Room'
 import Admin from './routes/Admin'
 
+
 function App() {
   return (
     <div>
@@ -15,7 +16,8 @@ function App() {
         <Switch>
           <Route exact path="/" component={Intro}></Route>
           <Route path="/signup" component={SignUp}></Route>
-          <Route path="/main" component={Main}></Route>
+            <Route path="/main" component={Main}></Route>
+          
           <Route path="/room:id" component={Room}></Route>
           <Route path="/admin" component={Admin}></Route>
         </Switch>

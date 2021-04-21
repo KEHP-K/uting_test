@@ -1,4 +1,5 @@
 import routes from '../constants/routes';
+import axios from 'axios'
 
 export const BASE_URL = routes.HOME;
 
@@ -9,16 +10,17 @@ export const BASE_URL = routes.HOME;
 //     };
 // }
 
-export async function fetchMeeting(meetingId, name, region){
+export async function fetchMeeting(meetingId, room){
+    console.log(room)
     const response = await fetch(
-        `${BASE_URL}join?title=${encodeURIComponent(
-            meetingId
-        )}&name=${encodeURIComponent(name)}${
-            region ? `$region=${encodeURIComponent(region)}` : ''
-        }`,
+        `http://localhost:3001/meetings/join`,
         {
-            method: 'POST'
-        }
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+              },
+            body: JSON.stringify(room),
+        },
     );
     const data = await response.json();
 
@@ -30,11 +32,11 @@ export async function fetchMeeting(meetingId, name, region){
 
 export function createGetAttendeeCallback(meetingId){
     return async (chimeAttendeeId, externalUserId) => {
-        const attendeeUrl = `${BASE_URL}attendee?title=${encodeURIComponent(
+        const attendeeUrl = `http://localhost:3001/meetings/attendee?title=${encodeURIComponent(
             meetingId
         )}$attendee=${encodeURIComponent(chimeAttendeeId)}`;
         const res = await fetch(attendeeUrl, {
-            method: 'GET'
+            method: 'GET',
         });
 
         if(!res.ok){
