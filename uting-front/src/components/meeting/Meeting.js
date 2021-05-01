@@ -42,7 +42,7 @@ export default function Meeting() {
                 attendeeInfo: JoinInfo.Attendee
             });
             await meetingManager.start();
-            history.push("/Rooms");
+            history.push('/deviceSetup');
         } catch(error){
             console.log(error);
         }
