@@ -24,15 +24,18 @@ function App() {
                 <Route exact path="/" component={Intro}></Route>
                 <Route path="/signup" component={SignUp}></Route>
                 <Route path="/main" component={Main}></Route>
-                <Route path='/deviceSetup' component={DeviceSetup}></Route>
-                <Route path="/room/:id" component={Room}></Route>
+                <Route path='/deviceSetup'>
+                  <DeviceSetup />
+                </Route>
+                <Route path="/room/:id">
+                  <Room />
+                </Route>
                 <Route path="/admin" component={Admin}></Route>
               </Switch>
             </NavigationProvider>
           </MeetingProvider>
         </AppStateProvider>
       </BrowserRouter>
-          
     </div>
   );
 }
