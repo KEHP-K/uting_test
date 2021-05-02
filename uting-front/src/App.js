@@ -9,16 +9,17 @@ import Room from './routes/Room'
 import Admin from './routes/Admin'
 import DeviceSetup from './pages/DeviceSetup'
 import meetingConfig from './meetingConfig';
-import { MeetingProvider } from 'amazon-chime-sdk-component-library-react'
+import { MeetingManager, MeetingProvider, useMeetingManager } from 'amazon-chime-sdk-component-library-react'
 import { AppStateProvider } from './providers/AppStateProvider';
 import { NavigationProvider } from './providers/NavigationProvider';
 
 function App() {
+  const meetingManager = new MeetingManager(meetingConfig);
   return (
     <div>
       <BrowserRouter>
         <AppStateProvider>
-          <MeetingProvider {...meetingConfig}>
+          <MeetingProvider meetingManager={meetingManager}>
             <NavigationProvider>
               <Switch>
                 <Route exact path="/" component={Intro}></Route>
