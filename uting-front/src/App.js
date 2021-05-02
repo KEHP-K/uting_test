@@ -9,19 +9,28 @@ import Room from './routes/Room'
 import Admin from './routes/Admin'
 import DeviceSetup from './pages/DeviceSetup'
 
+import { MeetingProvider } from 'amazon-chime-sdk-component-library-react'
+import { AppStateProvider, useAppState } from './providers/AppStateProvider';
+import { NavigationProvider } from './providers/NavigationProvider';
+
 function App() {
   return (
     <div>
       <BrowserRouter>
-        <Switch>
-          <Route exact path="/" component={Intro}></Route>
-          <Route path="/signup" component={SignUp}></Route>
-          <Route path="/main" component={Main}></Route>
-          <Route path='/deviceSetup' component={DeviceSetup}></Route>
-          <Route path="/room/:id" component={Room}></Route>
-          <Route path="/admin" component={Admin}></Route>
-        </Switch>
-          
+        <AppStateProvider>
+          <MeetingProvider>
+            <NavigationProvider>
+              <Switch>
+                <Route exact path="/" component={Intro}></Route>
+                <Route path="/signup" component={SignUp}></Route>
+                <Route path="/main" component={Main}></Route>
+                <Route path='/deviceSetup' component={DeviceSetup}></Route>
+                <Route path="/room/:id" component={Room}></Route>
+                <Route path="/admin" component={Admin}></Route>
+              </Switch>
+            </NavigationProvider>
+          </MeetingProvider>
+        </AppStateProvider>
       </BrowserRouter>
           
     </div>
