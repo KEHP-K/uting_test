@@ -8,12 +8,21 @@ import {
     MeetingProvider,
     useMeetingManager
 } from 'amazon-chime-sdk-component-library-react'
-
+import { useAppState } from '../../providers/AppStateProvider';
 
 
 export default function Meeting() {
     const history = useHistory();
     const meetingManager = useMeetingManager();
+    const { setAppMeetingInfo, region: appRegion, meetingId: appMeetingId } = useAppState();
+    const [meetingId, setMeetingId] = useState(appMeetingId);
+    const [meetingErr, setMeetingErr] = useState(false);
+    const [name, setName] = useState('');
+    const [nameErr, setNameErr] = useState(false);
+    const [region, setRegion] = useState(appRegion);
+    const [isLoading, setIsLoading] = useState(false);
+    // const { errorMessage, updateErrorMessage } = useContext(getErrorContext());
+    
     const [room, setRoom] = useState({
         title:'', //방제
         num:0,    // 전체 방인원수 나누기 2
@@ -31,17 +40,20 @@ export default function Meeting() {
 
         const id = room.title.trim().toLocaleLowerCase();
 
+        //setIsLoading(true);
         meetingManager.getAttendee = createGetAttendeeCallback(id);
 
         
-        const { JoinInfo } = await fetchMeeting(id, room);
 
         try {
+            const { JoinInfo } = await fetchMeeting(id, room);
             await meetingManager.join({
                 meetingInfo: JoinInfo.Meeting,
                 attendeeInfo: JoinInfo.Attendee
             });
-            await meetingManager.start();
+            
+            // await meetingManager.start();
+            setAppMeetingInfo(id, "Tester", 'us-east-1');
             history.push('/deviceSetup');
         } catch(error){
             console.log(error);
@@ -58,9 +70,9 @@ export default function Meeting() {
 
     return (
         <React.Fragment>
-                <input className="room-input" type='text' placeholder='방제목' onChange={onChangehandler} name='title' />
-                <input type='number' min='1' max='4' placeholder='명수' onChange={onChangehandler} name='num'/>
-                <button onClick={makeRoom}>방만들기</button>
+            <input className="room-input" type='text' placeholder='방제목' onChange={onChangehandler} name='title' />
+            <input type='number' min='1' max='4' placeholder='명수' onChange={onChangehandler} name='num'/>
+            <button onClick={makeRoom}>방만들기</button>
         </React.Fragment>
     )
 }

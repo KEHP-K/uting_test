@@ -63,7 +63,7 @@ router.post('/join', async function(req, res, next){
   });
 
   const title = meeting.title;
-  const name = "백승수"; // @TODO 세션을활용해서 Nickname 넣어주기
+  const name = "Tester"; // @TODO 세션을활용해서 Nickname 넣어주기
   const region = "us-east-1"
   
   if (!meetingCache[title]){
@@ -71,8 +71,7 @@ router.post('/join', async function(req, res, next){
       .createMeeting({
         ClientRequestToken: uuid(),
         MediaRegion: region
-      })
-      .promise();
+      }).promise();
       attendeeCache[title] = {};
   }
   const joinInfo = {
@@ -84,20 +83,17 @@ router.post('/join', async function(req, res, next){
           .createAttendee({
             MeetingId: meetingCache[title].Meeting.MeetingId,
             ExternalUserId: uuid()
-          })
-          .promise()
-      ).Attendee
+          }).promise()).Attendee
     }
   };
   attendeeCache[title][joinInfo.JoinInfo.Attendee.AttendeeId] = name;
 
   
-  meeting.save((err)=>{
-    res.statusCode = 201;
-    res.setHeader('Content-Type', 'application/json');
-    res.write(JSON.stringify(joinInfo), 'utf8');
-    res.end();
-  });
+  meeting.save();
+  res.statusCode = 201;
+  res.setHeader('Content-Type', 'application/json');
+  res.write(JSON.stringify(joinInfo), 'utf8');
+  res.end();
 })
 
 // PUT edit one meeting

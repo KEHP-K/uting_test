@@ -11,14 +11,14 @@ export const BASE_URL = routes.HOME;
 // }
 
 export async function fetchMeeting(meetingId, room){
-    console.log(room)
+    // console.log(room)
     const response = await fetch(
         `http://localhost:3001/meetings/join`,
         {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-              },
+            },
             body: JSON.stringify(room),
         },
     );
