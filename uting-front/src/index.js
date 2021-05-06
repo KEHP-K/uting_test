@@ -15,9 +15,7 @@ console.log(firebase)
 ReactDOM.render(
   <React.StrictMode>
       <ThemeProvider theme={lightTheme}>
-      <MeetingProvider>
         <App />
-      </MeetingProvider>
       </ThemeProvider>
     </React.StrictMode>,
   document.getElementById('root')
