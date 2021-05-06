@@ -9,18 +9,19 @@ import {
     useMeetingManager
 } from 'amazon-chime-sdk-component-library-react'
 import { useAppState } from '../../providers/AppStateProvider';
+import { ConsoleLogger } from 'amazon-chime-sdk-js';
 
 
 export default function Meeting() {
     const history = useHistory();
     const meetingManager = useMeetingManager();
     const { setAppMeetingInfo, region: appRegion, meetingId: appMeetingId } = useAppState();
-    const [meetingId, setMeetingId] = useState(appMeetingId);
-    const [meetingErr, setMeetingErr] = useState(false);
-    const [name, setName] = useState('');
-    const [nameErr, setNameErr] = useState(false);
-    const [region, setRegion] = useState(appRegion);
-    const [isLoading, setIsLoading] = useState(false);
+    // const [meetingId, setMeetingId] = useState(appMeetingId);
+    // const [meetingErr, setMeetingErr] = useState(false);
+    // const [name, setName] = useState('');
+    // const [nameErr, setNameErr] = useState(false);
+    // const [region, setRegion] = useState(appRegion);
+    // const [isLoading, setIsLoading] = useState(false);
     // const { errorMessage, updateErrorMessage } = useContext(getErrorContext());
     
     const [room, setRoom] = useState({
@@ -34,6 +35,8 @@ export default function Meeting() {
             ...room,
             [name]: value
         })
+        console.log('room form : ')
+        console.log(room)
     };
     const makeRoom = async(e) => {
         e.preventDefault();
