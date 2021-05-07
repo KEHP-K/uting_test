@@ -48,18 +48,18 @@ const MeetingJoinDetails = () => {
           Joining meeting <b>{meetingId}</b> as <b>{localUserName}</b>
         </Label>
       </Flex>
-      {error && (
+      {/* {error && (
         <Modal size="md" onClose={() => setError('')}>
           <ModalHeader title={`Meeting ID: ${meetingId}`} />
-          {/* <ModalBody>
+          <ModalBody>
             <Card
               title="Unable to join meeting"
               description="There was an issue in joining this meeting. Check your connectivity and try again."
               smallText={error}
             />
-          </ModalBody> */}
+          </ModalBody>
         </Modal>
-      )}
+      )} */}
     </>
   );
 };

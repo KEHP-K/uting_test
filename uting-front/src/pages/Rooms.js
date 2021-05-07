@@ -12,6 +12,7 @@ import {
 } from 'amazon-chime-sdk-component-library-react';
 
 import MeetingControls from '../container/MeetingControls';
+import MeetingDetails from '../container/MeetingDetails';
 
 export default function Rooms() {
     const history = useHistory();
@@ -37,7 +38,7 @@ export default function Rooms() {
     return (
         <div>
             <UserActivityProvider>
-                <VideoTileGrid className="videos" />
+                <VideoTileGrid className="videos" noRemoteVideoView={<MeetingDetails />} />
                 <MeetingControls />
             </UserActivityProvider>
         </div>
