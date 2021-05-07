@@ -47,10 +47,33 @@ router.get('/', async function(req, res, next) {
 });
 
 // GET one meeting
-router.get('/attendee:id', async function(req, res, next) {
-  const meeting = await Meeting.findOne({_id:req.params.id});
-  res.json(meeting);
+router.get('/attendee?', async function (req, res, next) {
+  // const meeting = await Meeting.findOne({ _id: req.params.id });
+
+  const title = req.query.title;
+  const attendee = req.query.attendee;
+
+  const attendeeInfo = {
+    AttendeeInfo: {
+      AttendeeId: attendee,
+      Name: attendeeCache[title][attendee]
+    }
+  };
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'application/json');
+  res.write(JSON.stringify(attendeeInfo), 'utf8');
+  res.end();
+
+  console.log(req.query.title)
+  console.log(req.query.attendee)
 });
+
+
+// GET one meeting
+// router.get('/attendee:id', async function(req, res, next) {
+//   const meeting = await Meeting.findOne({_id:req.params.id});
+//   res.json(meeting);
+// });
 
 // POST write one meeting
 router.post('/join', async function(req, res, next){
